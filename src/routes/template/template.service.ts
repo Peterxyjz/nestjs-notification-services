@@ -26,8 +26,16 @@ export class TemplateService {
       // Validate các biến trong template
       this.validateTemplateVariables(createTemplateDto)
 
-      const createdTemplate = new this.templateModel(createTemplateDto)
-      return createdTemplate.save()
+      const templateData = {
+        name: createTemplateDto.name,
+        type: createTemplateDto.type,
+        channels: createTemplateDto.channels,
+        variables: createTemplateDto.variables,
+        translations: createTemplateDto.translations,
+        active: createTemplateDto.active ?? true
+      }
+      const createdTemplate = await this.templateModel.create(templateData)
+      return createdTemplate.toObject()
     } catch (error) {
       this.logger.error(`Failed to create template: ${error.message}`, error.stack)
       throw error

@@ -55,30 +55,6 @@ $ pnpm run test:e2e
 $ pnpm run test:cov
 ```
 
-## Deployment
-
-```bash
-#== Environment
-NODE_ENV=development
-MODULES_SET=monolith
-
-#== Application
-APP_NAME="API Documentation"
-APP_URL=http://localhost:4000
-APP_PORT=4000
-API_PREFIX=api
-APP_CORS_ORIGIN=*
-
-#== Database
-DB_URI=mongodb+srv://huyq09:eXJvcwPfLeyC2dis@cluster0.95bkg.mongodb.net/
-DB_NAME=db-test
-
-
-REDIS_HOST=redis
-REDIS_PORT=6379
-
-```
-
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
