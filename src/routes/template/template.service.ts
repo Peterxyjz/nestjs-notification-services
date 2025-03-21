@@ -2,13 +2,13 @@ import {
   CreateTemplateDto,
   UpdateTemplateDto
 } from '@/routes/template/dto/template.dto'
+import { TemplateEngineFactory } from '@/routes/template/template-engine.factory'
 import {
   RenderedContent,
   TemplateRenderRequest
 } from '@/shared/interfaces/template.interface'
 import { Injectable, Logger, NotFoundException } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import * as Handlebars from 'handlebars'
 import { Model } from 'mongoose'
 import { Template, TemplateDocument } from './schemas/template.schema'
 
@@ -18,7 +18,8 @@ export class TemplateService {
   private readonly compiledTemplates = new Map<string, any>()
 
   constructor(
-    @InjectModel(Template.name) private templateModel: Model<TemplateDocument>
+    @InjectModel(Template.name) private templateModel: Model<TemplateDocument>,
+    private templateEngineFactory: TemplateEngineFactory
   ) {}
 
   async create(createTemplateDto: CreateTemplateDto): Promise<Template> {
@@ -165,10 +166,17 @@ export class TemplateService {
 
         for (const [fieldName, fieldValue] of Object.entries(localizedContent)) {
           if (typeof fieldValue === 'string') {
+            // Lấy engine type từ template hoặc mặc định là handlebars
+            const engineType = localizedContent.engineType || 'handlebars'
+            const engine = this.templateEngineFactory.getEngine(engineType)
+
+            const cacheKey = `${templateId}_${channelName}_${fieldName}_${locale}_${engineType}`
             const compiledTemplate = this.getCompiledTemplate(
-              `${templateId}_${channelName}_${fieldName}_${locale}`,
-              fieldValue
+              cacheKey,
+              fieldValue,
+              engineType
             )
+
             renderedChannelContent[fieldName] = compiledTemplate(data)
           }
         }
@@ -183,9 +191,14 @@ export class TemplateService {
     }
   }
 
-  private getCompiledTemplate(cacheKey: string, templateContent: string) {
+  private getCompiledTemplate(
+    cacheKey: string,
+    templateContent: string,
+    engineType: string
+  ) {
     if (!this.compiledTemplates.has(cacheKey)) {
-      this.compiledTemplates.set(cacheKey, Handlebars.compile(templateContent))
+      const engine = this.templateEngineFactory.getEngine(engineType)
+      this.compiledTemplates.set(cacheKey, engine.compile(templateContent))
     }
     return this.compiledTemplates.get(cacheKey)
   }

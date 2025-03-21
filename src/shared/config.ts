@@ -50,6 +50,25 @@ class ConfigSchema {
   @IsString()
   @IsNotEmpty()
   DB_NAME: string
+
+  @IsString()
+  @IsNotEmpty()
+  EMAIL_HOST: string
+
+  @IsNotEmpty()
+  EMAIL_PORT: string
+
+  @IsNotEmpty()
+  EMAIL_SECURE: string
+
+  @IsNotEmpty()
+  EMAIL_USER: string
+
+  @IsNotEmpty()
+  EMAIL_PASS: string
+
+  @IsNotEmpty()
+  EMAIL_FROM: string
 }
 const configServer = plainToInstance(ConfigSchema, process.env, {
   enableImplicitConversion: true

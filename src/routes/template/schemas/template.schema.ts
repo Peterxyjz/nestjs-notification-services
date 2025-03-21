@@ -19,6 +19,9 @@ export class TemplateContent {
 
   @Prop({ default: false })
   isHtml?: boolean
+
+  @Prop({ default: 'handlebars' })
+  engineType?: string
 }
 
 @Schema({ timestamps: true })

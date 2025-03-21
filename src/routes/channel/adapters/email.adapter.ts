@@ -1,3 +1,4 @@
+import envConfig from '@/shared/config'
 import {
   ChannelAdapter,
   ChannelPayload,
@@ -13,16 +14,16 @@ export class EmailAdapter implements ChannelAdapter {
   private transporter: nodemailer.Transporter
 
   constructor(private configService: ConfigService) {
-    // Khởi tạo nodemailer transporter
+    // Khởi tạo nodemailer transporter với kiểu cụ thể
     this.transporter = nodemailer.createTransport({
-      host: this.configService.get<string>('email.host'),
-      port: this.configService.get<number>('email.port'),
-      secure: this.configService.get<boolean>('email.secure'),
+      host: envConfig.EMAIL_HOST,
+      port: parseInt(envConfig.EMAIL_PORT),
+      secure: envConfig.EMAIL_SECURE === 'true',
       auth: {
-        user: this.configService.get<string>('email.auth.user'),
-        pass: this.configService.get<string>('email.auth.pass')
+        user: envConfig.EMAIL_USER,
+        pass: envConfig.EMAIL_PASS
       }
-    })
+    } as nodemailer.TransportOptions)
   }
 
   async send(payload: ChannelPayload): Promise<DeliveryResult> {

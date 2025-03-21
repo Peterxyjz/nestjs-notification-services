@@ -9,7 +9,7 @@ export type PreferenceDocument = Preference & Document
 
 @Schema({ timestamps: true })
 export class Preference {
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true, unique: true, index: true })
   userId: string
 
   @Prop({

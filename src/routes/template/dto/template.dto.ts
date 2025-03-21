@@ -21,6 +21,10 @@ class TemplateContentDto {
   @IsBoolean()
   @IsOptional()
   isHtml?: boolean
+
+  @IsString()
+  @IsOptional()
+  engineType?: string
 }
 
 export class CreateTemplateDto {
