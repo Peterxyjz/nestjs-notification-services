@@ -1,3 +1,7 @@
+import { ChannelModule } from '@/routes/channel/channel.module'
+import { NotificationModule } from '@/routes/notification/notification.module'
+import { PreferenceModule } from '@/routes/preference/preference.module'
+import { TemplateModule } from '@/routes/template/template.module'
 import envConfig from '@/shared/config'
 import { SharedModule } from '@/shared/shared.module'
 import { ModuleMetadata } from '@nestjs/common'
@@ -30,7 +34,13 @@ function generateModulesSet() {
 
   switch (modulesSet) {
     case 'monolith':
-      customModules = [SharedModule]
+      customModules = [
+        SharedModule,
+        NotificationModule,
+        TemplateModule,
+        PreferenceModule,
+        ChannelModule
+      ]
       break
     default:
       console.error(`Unsupported modules set: ${modulesSet}`)
