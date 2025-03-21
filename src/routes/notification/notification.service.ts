@@ -120,7 +120,6 @@ export class NotificationService {
       for (const channel of channels) {
         const content = renderedContent[channel]
         if (!content) continue
-
         const result = await this.channelService.send({
           channelType: channel,
           userId: notification.userId,
@@ -128,7 +127,7 @@ export class NotificationService {
           metadata: {
             notificationId: notification._id,
             notificationType: notification.type,
-            email: notification.data.email // Nếu có
+            email: notification.data.email
           }
         })
 

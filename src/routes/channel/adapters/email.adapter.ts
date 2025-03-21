@@ -34,10 +34,10 @@ export class EmailAdapter implements ChannelAdapter {
       const userEmail = metadata.email || `${userId}@example.com` // Thay thế với logic lấy email thực tế
 
       const mailOptions = {
-        from: this.configService.get<string>('email.from'),
+        from: envConfig.EMAIL_FROM,
         to: userEmail,
         subject: content.subject,
-        ...(content.isHtml ? { html: content.body } : { text: content.body })
+        html: content.body
       }
 
       const result = await this.transporter.sendMail(mailOptions)
